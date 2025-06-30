@@ -51,7 +51,3 @@ class CurrencyConverter:
         amount_home_cur = round(amount/conv_rate, 2)
         return amount_home_cur
 
-# exchange_rates = CurrencyConverter.from_api('GBP', ['USD', 'PHP', 'IDR'])
-# print(exchange_rates.rates)
-# x = exchange_rates.convert(1200, 'IDR')
-# print(f'The amount in GBP is {x}')
