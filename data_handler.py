@@ -33,7 +33,7 @@ class DataHandler:
     # Load country metadata from Json file
     @staticmethod
     def load_countries_data():
-        with open('/home/ryancoulman/Python Scripts/Budget_Tracker/countries.json', 'r') as f:
+        with open('countries.json', 'r') as f:
             data = json.load(f)
         return data
     
