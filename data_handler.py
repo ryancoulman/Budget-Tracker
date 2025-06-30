@@ -152,12 +152,6 @@ class DataHandler:
         self.daily_average = sum([dict['average (home)'] for dict in self.daily_averages]) / len(self.visited_countries)
         self.total_average = (self.daily_average) + (total_oneoff_homecur / num_entries_s1)
 
-        # Output summary
-        # print(daily_averages)
-        # print(f"Your daily spending average in {last_country_fullname} is {daily_avg_lastcountry['currency']} {daily_avg_lastcountry['average (local)']} ({self.home_currency} {daily_avg_lastcountry['average (home)']})")
-        # print(f"Your overall daily average (excluding one off purchases) is {self.home_currency} {round(daily_average, 2)}")
-        # print(f'Your overall average is {self.home_currency} {round(total_average, 2)}')
-
     # Use streamlit to visually present data 
     def visualiser(self):
 
@@ -173,11 +167,11 @@ class DataHandler:
         # Check if user has made entry today or yesterday 
         if recent_spending is not None:
             st.write(recent_spending)
-        st.write(f"Your daily spending average in {self.last_country_fullname} is {self.daily_avg_lastcountry['currency']} {self.daily_avg_lastcountry['average (local)']} ({self.home_currency} {self.daily_avg_lastcountry['average (home)']})")
+        st.write(f"Your daily spending average in {self.last_country_fullname} is {self.daily_avg_lastcountry['currency']} {round(self.daily_avg_lastcountry['average (local)'], 2)} ({self.home_currency} {self.daily_avg_lastcountry['average (home)']})")
         st.write(f"Your overall daily average (excluding one off purchases) is {self.home_currency} {round(self.daily_average, 2)}")
         st.write(f'Your overall average is {self.home_currency} {round(self.total_average, 2)}')
         st.write('## Visual Overview')
-        fig = px.bar(df, x="country", y="average (home)", color="currency")
+        fig = px.bar(df, x="Country", y=f"Average Spend ({self.home_currency})")
         st.plotly_chart(fig)
 
 
