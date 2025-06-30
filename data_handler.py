@@ -79,10 +79,10 @@ class DataHandler:
         base_str = f'you spent {amount} {currency} ({self.home_currency} {converted})'
         # Check it matches todays date
         if last_date == str(date.today()):
-            return 'Today' + base_str
+            return 'Today ' + base_str
         # Check if user instead made entry yesterday 
         elif last_date == str(date.today() - timedelta(days=1)):
-            return 'Yesterday' + base_str 
+            return 'Yesterday ' + base_str 
         else:
             return None
         
