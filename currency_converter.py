@@ -1,6 +1,7 @@
 import requests 
+import streamlit as st
 
-API_KEY = 'a404024ff8b8edff30ce9c57'
+API_KEY = st.secrets["EXCHANGE_API_KEY"]
 
 class CurrencyConverter:
     def __init__(self, base_currency, rates):
