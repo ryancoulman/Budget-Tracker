@@ -156,6 +156,7 @@ class DataHandler:
     def visualiser(self):
 
         df = pd.DataFrame(self.daily_averages)  
+        df = df.rename(columns={'average (home)': f'average ({self.home_currency})'})
 
         st.title('Travel Budget Tracker')
         st.write("## Average Spending by Country")
