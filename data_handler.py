@@ -42,6 +42,7 @@ class DataHandler:
     def get_unique_countries(sheet):
         unique_countries = []
         for r in sheet:
+            print(r)
             country = r['country'].strip()
             if country not in unique_countries:
                 unique_countries.append(country)
