@@ -2,9 +2,9 @@ from datetime import date, timedelta
 import json
 from currency_converter import CurrencyConverter
 
-# import streamlit as st
-# import pandas as pd
-# import plotly.express as px
+import streamlit as st
+import pandas as pd
+import plotly.express as px
 
 
 class DataHandler:
@@ -12,10 +12,6 @@ class DataHandler:
         self.home_currency = home_currency
         self.sheet1_data = sheet1_data
         self.sheet2_data = sheet2_data
-
-        # Extract actual data from the sheets (remove sheet name wrapper)
-        # self.sheet1_data = self.extract_sheet_data(sheet1_data)
-        # self.sheet2_data = self.extract_sheet_data(sheet2_data)
 
         # Load Json data about countries (e.g., currency codes)
         self.countries_data = self.load_countries_data()
@@ -27,10 +23,6 @@ class DataHandler:
         # Fetch exchange rates only for needed currencies
         self.exchange_rates = CurrencyConverter.from_api(home_currency, visited_currencies)
 
-    # Extract actual data from the sheets (remove sheet name wrapper)
-    @staticmethod
-    def extract_sheet_data(sheet_data):
-        return list(sheet_data.values())[0]
 
     # Load country metadata from Json file
     @staticmethod
@@ -44,9 +36,7 @@ class DataHandler:
     def get_unique_countries(sheet):
         unique_countries = []
         for r in sheet:
-            print(r)
             country = r['Country'].strip()
-            print(country)
             if country not in unique_countries:
                 unique_countries.append(country)
         return unique_countries
@@ -120,10 +110,10 @@ class DataHandler:
                 country_name = self.lookup_country_data('countryCode', country)
                 # Store data in a dictionary 
                 averages.append({
-                    'country': country_name,
-                    'currency': currency,
-                    'average (local)': average_loccur,
-                    'average (home)': average_homecur
+                    'Country': country_name,
+                    'Currency': currency,
+                    'Average (local)': average_loccur,
+                    'Average (home)': average_homecur
                 })
             return averages
 
@@ -152,39 +142,32 @@ class DataHandler:
         self.daily_averages = calculate_avg_spend(total_daily, num_country)
 
         # Calcuate daily average in last country, overall, and total average
-        self.daily_avg_lastcountry = next(dict for dict in self.daily_averages if dict['country'] == last_country)
-        self.daily_average = sum([dict['average (home)'] for dict in self.daily_averages]) / len(self.visited_countries)
+        self.daily_avg_lastcountry = next(dict for dict in self.daily_averages if dict['Country'] == last_country)
+        self.daily_average = sum([dict['Average (home)'] for dict in self.daily_averages]) / len(self.visited_countries)
         self.total_average = (self.daily_average) + (total_oneoff_homecur / num_entries_s1)
 
     # Use streamlit to visually present data 
     def visualiser(self):
 
+        df = pd.DataFrame(self.daily_averages)  
+        df = df.rename(columns={'Average (home)': f'Average Spend ({self.home_currency})'})
+        print(df.keys())
 
-        print(f"Your daily spending average in {self.last_country_fullname} is {self.daily_avg_lastcountry['currency']} {round(self.daily_avg_lastcountry['average (local)'], 2)} ({self.home_currency} {self.daily_avg_lastcountry['average (home)']})")
-        print(f"Your overall daily average (excluding one off purchases) is {self.home_currency} {round(self.daily_average, 2)}")
-        print(f'Your overall average is {self.home_currency} {round(self.total_average, 2)}')
-        print('## Visual Overview')
-
-        
-
-        # df = pd.DataFrame(self.daily_averages)  
-        # df = df.rename(columns={'average (home)': f'average ({self.home_currency})'})
-
-        # st.title('Travel Budget Tracker')
-        # st.write("## Average Spending by Country")
-        # st.write('')
-        # st.dataframe(df)
-        # st.write('')
-        # st.write('## Spending Stats Overview')
-        # recent_spending = self.recent_spending()
-        # # Check if user has made entry today or yesterday 
-        # if recent_spending is not None:
-        #     st.write(recent_spending)
-        # st.write(f"Your daily spending average in {self.last_country_fullname} is {self.daily_avg_lastcountry['currency']} {round(self.daily_avg_lastcountry['average (local)'], 2)} ({self.home_currency} {self.daily_avg_lastcountry['average (home)']})")
-        # st.write(f"Your overall daily average (excluding one off purchases) is {self.home_currency} {round(self.daily_average, 2)}")
-        # st.write(f'Your overall average is {self.home_currency} {round(self.total_average, 2)}')
-        # st.write('## Visual Overview')
-        # fig = px.bar(df, x="Country", y=f"Average Spend ({self.home_currency})")
-        # st.plotly_chart(fig)
+        st.title('Travel Budget Tracker')
+        st.write("## Average Spending by Country")
+        st.write('')
+        st.dataframe(df)
+        st.write('')
+        st.write('## Spending Stats Overview')
+        recent_spending = self.recent_spending()
+        # Check if user has made entry today or yesterday 
+        if recent_spending is not None:
+            st.write(recent_spending)
+        st.write(f"Your daily spending average in {self.last_country_fullname} is {self.daily_avg_lastcountry['Currency']} {round(self.daily_avg_lastcountry['Average (local)'], 2)} ({self.home_currency} {self.daily_avg_lastcountry['Average (home)']})")
+        st.write(f"Your overall daily average (excluding one off purchases) is {self.home_currency} {round(self.daily_average, 2)}")
+        st.write(f'Your overall average is {self.home_currency} {round(self.total_average, 2)}')
+        st.write('## Visual Overview')
+        fig = px.bar(df, x="Country", y=f"Average Spend ({self.home_currency})")
+        st.plotly_chart(fig)
 
 

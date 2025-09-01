@@ -19,15 +19,15 @@ if __name__ == '__main__':
     response = requests.get(f"{BASE_URL}/Daily", headers=HEADERS)
     print("Status:", response.status_code)
 
-    # Fetch sheet data (Fetch 100 rows)
-    daily_response = requests.get(f"{BASE_URL}/Daily?limit={100}", headers=HEADERS).json()
+    # # Fetch sheet data (Fetch 100 rows)
+    daily_response = requests.get(f"{BASE_URL}/Daily?limit={100}&rnd={34}", headers=HEADERS).json()
     oneoff_response = requests.get(f"{BASE_URL}/OneOff", headers=HEADERS).json()
 
-    # Extract the "results" arrays for Table data
+    # # Extract the "results" arrays for Table data
     daily_data = daily_response.get("results", [])
     oneoff_data = oneoff_response.get("results", [])
 
-    # Process the data
+    # # Process the data
     datahandler = DataHandler(daily_data, oneoff_data, home_currency)
     datahandler.average_spending()
     datahandler.visualiser()
