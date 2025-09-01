@@ -1,0 +1,15 @@
+# Python cache
+__pycache__/
+*.pyc
+
+# Virtual environment
+.venv/
+
+# Streamlit secrets
+.streamlit/
+
+# Email Handler
+email_handler.py
+
+# Test file 
+test.py
